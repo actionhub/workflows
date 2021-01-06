@@ -1,4 +1,4 @@
-// import * as core from "@actions/core";
+import * as core from "@actions/core";
 // import {get} from "./parse-ints";
 // import * as os from "os";
 import * as params from "./parse-params";
@@ -8,9 +8,9 @@ const repoUrl = params.get("repo-url");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
-console.log(includeBranches.length);
+core.info("size：" + includeBranches.length);
 includeBranches.forEach(b => {
-    console.log(b.indexOf("a"));
+    core.info("idx:" + b.indexOf("a"));
 })
 
 console.log("HelloWorld git-sync!", sshKey, repoUrl, includeBranches, excludeBranches);
