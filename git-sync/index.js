@@ -27,11 +27,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__webpack_require__(186));
 const params = __importStar(__webpack_require__(775));
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
+core.info("size：" + includeBranches.length);
+includeBranches.forEach(b => {
+    core.info("idx:" + b.indexOf("a"));
+});
 console.log("HelloWorld git-sync!", sshKey, repoUrl, includeBranches, excludeBranches);
 
 
