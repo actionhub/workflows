@@ -2,7 +2,7 @@ name: 'Git Sync Action'
 description: 'Sync a git repo to another git repo'
 runs:
   using: 'node12'
-  main: 'lib/index.js'
+  main: 'dist/index.js'
 inputs:
   deploy_key:
     description: 'Deploy key'
