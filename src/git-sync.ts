@@ -8,4 +8,8 @@ const repoUrl = params.get("repo-url");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
+includeBranches.forEach(b => {
+    console.log(b.indexOf("a"));
+})
+
 console.log("HelloWorld git-sync!", sshKey, repoUrl, includeBranches, excludeBranches);
