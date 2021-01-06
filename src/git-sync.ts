@@ -8,6 +8,7 @@ const repoUrl = params.get("repo-url");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
+console.log(includeBranches.length);
 includeBranches.forEach(b => {
     console.log(b.indexOf("a"));
 })
