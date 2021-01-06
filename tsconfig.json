@@ -61,5 +61,6 @@
 
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "exclude": [
+    "node_modules", "**/*.test.ts", "git-deploy/**/*", "git-sync/**/*"]
 }

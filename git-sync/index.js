@@ -3,12 +3,12 @@ module.exports =
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 822:
+/***/ 839:
 /***/ (() => {
 
 
-console.log("HelloWorld!");
-//# sourceMappingURL=index.js.map
+console.log("HelloWorld git-sync!");
+//# sourceMappingURL=git-sync.js.map
 
 /***/ })
 
@@ -50,6 +50,6 @@ console.log("HelloWorld!");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(822);
+/******/ 	return __webpack_require__(839);
 /******/ })()
 ;

@@ -1,5 +1,5 @@
-name: 'Git Sync Action'
-description: 'Sync a git repo to another git repo'
+name: 'Git Deploy Action'
+description: 'Deploy a direction to an git repo'
 runs:
   using: 'node12'
   main: 'index.js'
