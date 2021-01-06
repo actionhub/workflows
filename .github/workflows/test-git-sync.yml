@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./git-sync
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          ssh-host: github.com
+        with:
+          ssh-key: ${{ secrets.TEST }}
+          repo-url: github.com
+          include-branches: 'master;test'

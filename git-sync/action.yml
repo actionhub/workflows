@@ -4,28 +4,17 @@ runs:
   using: 'node12'
   main: 'index.js'
 inputs:
-  deploy_key:
+  ssh-key:
     description: 'Deploy key'
-    required: false
-  src_dir:
-    description: 'The src dir for sync.'
-    required: false
-  branch:
-    description: 'The des branch for sync.'
-    required: false
-    default: 'master'
-  des_dir:
-    description: 'The des dir for sync.'
-    required: false
-  repo_url:
+    required: true
+  repo-url:
     description: 'The url for des repo.'
+    required: true
+  include-branches:
+    description: 'include branches, split with `;`. sync all branches if empty'
     required: false
-  user_name:
-    description: 'Set Git user.name'
+    default: ''
+  exclude-branches:
+    description: 'exclude branches, split with `;`.'
     required: false
-  user_email:
-    description: 'Set Git user.email'
-    required: false
-  commit_message:
-    description: 'Set a custom commit message with a triggered commit hash'
-    required: false
+    default: ''

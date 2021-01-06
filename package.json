@@ -4,6 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
+    "all": "npm run build && npm run build:git-deploy && npm run build:git-sync",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build:git-deploy": "ncc build lib/git-deploy.js -o git-deploy",

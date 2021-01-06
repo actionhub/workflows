@@ -8,7 +8,7 @@ module.exports =
 
 
 console.log("HelloWorld git-deploy!");
-//# sourceMappingURL=git-deploy.js.map
+
 
 /***/ })
 
