@@ -1,0 +1,31 @@
+name: 'Git Sync Action'
+description: 'Sync a git repo to another git repo'
+runs:
+  using: 'node12'
+  main: 'lib/index.js'
+inputs:
+  deploy_key:
+    description: 'Deploy key'
+    required: false
+  src_dir:
+    description: 'The src dir for sync.'
+    required: false
+  branch:
+    description: 'The des branch for sync.'
+    required: false
+    default: 'master'
+  des_dir:
+    description: 'The des dir for sync.'
+    required: false
+  repo_url:
+    description: 'The url for des repo.'
+    required: false
+  user_name:
+    description: 'Set Git user.name'
+    required: false
+  user_email:
+    description: 'Set Git user.email'
+    required: false
+  commit_message:
+    description: 'Set a custom commit message with a triggered commit hash'
+    required: false
