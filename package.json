@@ -14,12 +14,18 @@
     "type": "git",
     "url": "https://github.com//okou19900722/workflows.git"
   },
-  "keywords": ["git", "github action", "git deploy", "git sync"],
+  "keywords": [
+    "git",
+    "github action",
+    "git deploy",
+    "git sync"
+  ],
   "author": "okou19900722",
   "license": "Apache2",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "simple-git": "^2.31.0"
+    "simple-git": "^2.31.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "typescript": "^4.1.3",
