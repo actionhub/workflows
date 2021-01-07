@@ -16,8 +16,9 @@ const excludeBranches = params.getArray("exclude-branches", ";", []);
             maxConcurrentProcesses: 6
         }
         const git = simpleGit(options);
-        let branches = await git.branch()
-        core.info(branches.all.join(","));
+        let branchSummary = await git.branch()
+        // const branches = branchSummary.all.filter(b => b.startsWith("remotes/"))
+        core.info(branchSummary.all.join(","));
     } catch (e) {
         core.setFailed(e);
     }

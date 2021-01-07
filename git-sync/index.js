@@ -55,8 +55,8 @@ const excludeBranches = params.getArray("exclude-branches", ";", []);
             maxConcurrentProcesses: 6
         };
         const git = simple_git_1.default(options);
-        let branches = yield git.branch();
-        core.info(branches.all.join(","));
+        let branchSummary = yield git.branch();
+        core.info(branchSummary.all.join(","));
     }
     catch (e) {
         core.setFailed(e);
