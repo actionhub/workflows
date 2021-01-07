@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as params from "./parse-params";
 import simpleGit from "simple-git";
 import path from "path";
+import {v4 as uuid} from 'uuid';
 
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
@@ -9,7 +10,7 @@ const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
 const REMOTE_BRANCH_PREFIX = "remotes/origin/";
-
+const remote = uuid();
 (async() => {
     try {
         const options = {
@@ -43,6 +44,9 @@ const REMOTE_BRANCH_PREFIX = "remotes/origin/";
         branchSummary = await git.branch()
         core.info(finalPush.join(","));
         core.info(branchSummary.all.join(","));
+
+        await git.addRemote(remote, repoUrl);
+        await git.push(["--all", "-u", remote, "-f"]);
         await git.deleteLocalBranches(finalPush);
     } catch (e) {
         core.setFailed(e);

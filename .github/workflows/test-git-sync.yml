@@ -8,27 +8,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
+      - name: Set coding ssh
+        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+        with:
+          ssh-private-key: ${{ secrets.CODING_DEPLOY }}
+          ssh-host: e.coding.net
+
       - uses: ./git-sync
         name: Test 1
         with:
           ssh-key: ${{ secrets.TEST }}
-          repo-url: github.com
+          repo-url: git@gitee.com:okou19900722/test.git
           include-branches: master;main;test
-      - uses: ./git-sync
-        name: Test 2
-        with:
-          ssh-key: ${{ secrets.TEST }}
-          repo-url: github.com
-      - uses: ./git-sync
-        name: Test 3
-        with:
-          ssh-key: ${{ secrets.TEST }}
-          repo-url: github.com
-          exclude-branches: test
-      - uses: ./git-sync
-        name: Test 4
-        with:
-          ssh-key: ${{ secrets.TEST }}
-          repo-url: github.com
-          include-branches: master;main;test
-          exclude-branches: test
+#      - uses: ./git-sync
+#        name: Test 2
+#        with:
+#          ssh-key: ${{ secrets.TEST }}
+#          repo-url: github.com
+#      - uses: ./git-sync
+#        name: Test 3
+#        with:
+#          ssh-key: ${{ secrets.TEST }}
+#          repo-url: github.com
+#          exclude-branches: test
+#      - uses: ./git-sync
+#        name: Test 4
+#        with:
+#          ssh-key: ${{ secrets.TEST }}
+#          repo-url: github.com
+#          include-branches: master;main;test
+#          exclude-branches: test
