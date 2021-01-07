@@ -9,7 +9,26 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./git-sync
+        name: Test 1
         with:
           ssh-key: ${{ secrets.TEST }}
           repo-url: github.com
-          include-branches: maaster;main;test
+          include-branches: master;main;test
+      - uses: ./git-sync
+        name: Test 2
+        with:
+          ssh-key: ${{ secrets.TEST }}
+          repo-url: github.com
+      - uses: ./git-sync
+        name: Test 3
+        with:
+          ssh-key: ${{ secrets.TEST }}
+          repo-url: github.com
+          exclude-branches: test
+      - uses: ./git-sync
+        name: Test 4
+        with:
+          ssh-key: ${{ secrets.TEST }}
+          repo-url: github.com
+          include-branches: master;main;test
+          exclude-branches: test
