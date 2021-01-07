@@ -74,10 +74,11 @@ const REMOTE_BRANCH_PREFIX = "remotes/origin/";
                     }
                 }
                 finalPush.push(branch);
-                git.branch([branch, b]);
+                yield git.branch([branch, b]);
             }
         }
         branchSummary = yield git.branch();
+        core.info(finalPush.join(","));
         core.info(branchSummary.all.join(","));
     }
     catch (e) {
