@@ -42,20 +42,42 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(2186));
 const params = __importStar(__webpack_require__(4775));
 const simple_git_1 = __importDefault(__webpack_require__(1477));
-const path_1 = __importDefault(__webpack_require__(5622));
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
+const REMOTE_BRANCH_PREFIX = "remotes/origin/";
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const options = {
-            baseDir: path_1.default.join(process.cwd()),
+            baseDir: process.cwd(),
             binary: 'git',
             maxConcurrentProcesses: 6
         };
         const git = simple_git_1.default(options);
         let branchSummary = yield git.branch();
+        const finalPush = [];
+        for (let b of branchSummary.all) {
+            if (!b.startsWith(REMOTE_BRANCH_PREFIX)) {
+                continue;
+            }
+            let branch = b.substr(REMOTE_BRANCH_PREFIX.length);
+            let exclude = excludeBranches.includes(branch);
+            let include = includeBranches.length == 0 || includeBranches.includes(branch);
+            if (include) {
+                if (exclude) {
+                    if (includeBranches.length == 0) {
+                        continue;
+                    }
+                    else {
+                        core.warning(`branch ${branch} in include branches and exclude branches. it will be include`);
+                    }
+                }
+                finalPush.push(branch);
+                git.branch([branch, b]);
+            }
+        }
+        branchSummary = yield git.branch();
         core.info(branchSummary.all.join(","));
     }
     catch (e) {
