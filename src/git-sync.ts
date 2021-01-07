@@ -43,6 +43,7 @@ const REMOTE_BRANCH_PREFIX = "remotes/origin/";
         branchSummary = await git.branch()
         core.info(finalPush.join(","));
         core.info(branchSummary.all.join(","));
+        await git.deleteLocalBranches(finalPush);
     } catch (e) {
         core.setFailed(e);
     }
