@@ -9,7 +9,7 @@ const lfs = params.getBoolean("lfs");
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
-// const REMOTE_BRANCH_PREFIX = "remotes/origin/";
+const REMOTE_BRANCH_PREFIX = "origin/";
 const remote = uuid();
 (async() => {
     try {
@@ -17,7 +17,11 @@ const remote = uuid();
         let branches = await git.branchList(true);
         core.info(branches.join(","));
         const finalPush = [];
-        for (let branch of branches) {
+        for (let b of branches) {
+            if (!b.startsWith(REMOTE_BRANCH_PREFIX)) {
+                continue;
+            }
+            const branch = b.substr(REMOTE_BRANCH_PREFIX.length);
             let exclude = excludeBranches.includes(branch);
             let include = includeBranches.length == 0 || includeBranches.includes(branch);
             if (include) {
@@ -32,8 +36,10 @@ const remote = uuid();
                 await git.createBranch(branch, true, branch);
             }
         }
-        branches = await git.branchList(true);
+        branches = await git.branchList(false);
         core.info(branches.join(","));
+        await git.addRemote(repoUrl);
+        await git.push(repoUrl, true);
 
 
 
