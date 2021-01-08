@@ -55,7 +55,7 @@ const remote = uuid_1.v4();
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let url = git_url_parse_1.default(repoUrl);
-        yield setup_ssh_1.default(sshKey, url.source, url.port || 22);
+        yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
         const git = yield gitCommandManager.createCommandManager(process.cwd(), lfs);
         let branches = yield git.branchList(true);
         core.info(branches.join(","));
