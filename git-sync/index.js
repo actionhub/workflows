@@ -203,7 +203,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const os_1 = __importDefault(__webpack_require__(2087));
 const path_1 = __importDefault(__webpack_require__(5622));
-const promises_1 = __importDefault(__webpack_require__(9225));
+const fs_1 = __importDefault(__webpack_require__(5747));
 const execa_1 = __importDefault(__webpack_require__(5447));
 const core = __importStar(__webpack_require__(2186));
 const HOME_DIR = process.env['HOME'] || os_1.default.homedir();
@@ -214,7 +214,7 @@ function setupSSH(privateKey, host, port) {
             if (!port) {
                 port = 22;
             }
-            yield promises_1.default.mkdir(SSH_DIR, { recursive: true });
+            fs_1.default.mkdirSync(SSH_DIR, { recursive: true });
             console.log('Starting ssh-agent');
             const authSock = '/tmp/ssh-auth.sock';
             yield execa_1.default('ssh-agent', ['-a', authSock]);
@@ -225,8 +225,8 @@ function setupSSH(privateKey, host, port) {
             console.log('Adding host to known_hosts');
             const { stdout } = yield execa_1.default('ssh-keyscan', ['-p', port.toString(), host]);
             const knownHostsFile = SSH_DIR + '/known_hosts';
-            yield promises_1.default.appendFile(knownHostsFile, stdout);
-            yield promises_1.default.chmod(knownHostsFile, '644');
+            fs_1.default.appendFileSync(knownHostsFile, stdout);
+            fs_1.default.chmodSync(knownHostsFile, '644');
         }
         catch (error) {
             core.setFailed(error.message);
@@ -6608,14 +6608,6 @@ module.exports = require("events");;
 
 "use strict";
 module.exports = require("fs");;
-
-/***/ }),
-
-/***/ 9225:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs/promises");;
 
 /***/ }),
 

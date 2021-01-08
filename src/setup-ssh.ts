@@ -1,6 +1,6 @@
 import os from "os";
 import path from "path";
-import fs from "fs/promises";
+import fs from "fs";
 import execa from "execa";
 import * as core from "@actions/core";
 import tmpDir from "./tmp-helper";
@@ -15,7 +15,7 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         }
 
         // Create the required directory
-        await fs.mkdir(SSH_DIR, {recursive: true})
+        fs.mkdirSync(SSH_DIR, {recursive: true})
 
         console.log('Starting ssh-agent')
 
@@ -35,8 +35,8 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         // Add the host to the known_hosts file
         const {stdout} = await execa('ssh-keyscan', ['-p', port.toString(), host])
         const knownHostsFile = SSH_DIR + '/known_hosts'
-        await fs.appendFile(knownHostsFile, stdout)
-        await fs.chmod(knownHostsFile, '644')
+        fs.appendFileSync(knownHostsFile, stdout)
+        fs.chmodSync(knownHostsFile, '644')
     } catch (error) {
         core.setFailed(error.message);
     }
