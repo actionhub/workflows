@@ -80,8 +80,8 @@ const remote = uuid();
         // await git.push(["--all", "-u", remote, "-f"]);
         // await git.deleteLocalBranches(finalPush);
     } catch (e) {
-        // core.setFailed(e);
-        console.error(e);
+        core.setFailed(e);
+        // console.error(e);
     }
 })();
 
