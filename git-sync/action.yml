@@ -1,5 +1,5 @@
 name: 'Git Sync Action'
-description: 'Sync a git repo to another git repo'
+description: 'Force sync a git repo to another git repo.Ensure that all branches are not protected'
 runs:
   using: 'node12'
   main: 'index.js'
