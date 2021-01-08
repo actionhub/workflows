@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set coding ssh
-        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-        with:
-          ssh-private-key: ${{ secrets.CODING_DEPLOY }}
-          ssh-host: e.coding.net
+#      - name: Set coding ssh
+#        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+#        with:
+#          ssh-private-key: ${{ secrets.CODING_DEPLOY }}
+#          ssh-host: e.coding.net
 
       - uses: ./git-sync
         name: Test 1

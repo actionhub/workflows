@@ -632,6 +632,7 @@ class GitCommandManager {
                 env[key] = this.gitEnv[key];
             }
             const stdout = [];
+            const stderr = [];
             const options = {
                 cwd: this.workingDirectory,
                 env,
@@ -640,11 +641,19 @@ class GitCommandManager {
                 listeners: {
                     stdout: (data) => {
                         stdout.push(data.toString());
+                    },
+                    stderr: (data) => {
+                        stderr.push(data.toString());
                     }
                 }
             };
             result.exitCode = yield exec.exec(`"${this.gitPath}"`, args, options);
             result.stdout = stdout.join('');
+            result.stderr = stderr.join('');
+            if (result.exitCode != 0) {
+                core.error(result.stderr);
+                throw new Error(`error: ${result.exitCode}`);
+            }
             return result;
         });
     }
@@ -701,6 +710,7 @@ class GitCommandManager {
 class GitOutput {
     constructor() {
         this.stdout = '';
+        this.stderr = '';
         this.exitCode = 0;
     }
 }

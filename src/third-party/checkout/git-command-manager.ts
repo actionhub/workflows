@@ -396,6 +396,7 @@ class GitCommandManager implements IGitCommandManager{
     }
 
     const stdout: string[] = []
+    const stderr: string[] = []
 
     const options = {
       cwd: this.workingDirectory,
@@ -405,12 +406,20 @@ class GitCommandManager implements IGitCommandManager{
       listeners: {
         stdout: (data: Buffer) => {
           stdout.push(data.toString())
+        },
+        stderr: (data: Buffer) => {
+          stderr.push(data.toString())
         }
       }
     }
 
     result.exitCode = await exec.exec(`"${this.gitPath}"`, args, options)
     result.stdout = stdout.join('')
+    result.stderr = stderr.join('')
+    if (result.exitCode != 0) {
+      core.error(result.stderr);
+      throw new Error(`error: ${result.exitCode}`)
+    }
     return result
   }
 
@@ -488,5 +497,6 @@ class GitCommandManager implements IGitCommandManager{
 
 class GitOutput {
   stdout = ''
+  stderr = ''
   exitCode = 0
 }
