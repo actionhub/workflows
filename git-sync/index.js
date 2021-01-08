@@ -654,6 +654,7 @@ class GitCommandManager {
                 core.error(result.stderr);
                 throw new Error(`error: ${result.exitCode}`);
             }
+            core.info("===============" + result.exitCode);
             return result;
         });
     }
