@@ -19,7 +19,7 @@ jobs:
         name: Test 1
         with:
           ssh-key: ${{ secrets.TEST }}
-          repo-url: git@gitee.com:okou19900722/test.git
+          repo-url: git@e.coding.net:lippen/vertx-web-site/vertx-web-site.git
           include-branches: master;main;test
 #      - uses: ./git-sync
 #        name: Test 2
