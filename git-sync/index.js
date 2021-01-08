@@ -75,8 +75,8 @@ const remote = uuid_1.v4();
         }
         branches = yield git.branchList(false);
         core.info(branches.join(","));
-        yield git.addRemote(repoUrl);
-        yield git.push(repoUrl, true);
+        yield git.addRemote(remote, repoUrl);
+        yield git.push(remote, true);
     }
     catch (e) {
         console.error(e);
@@ -360,23 +360,23 @@ class GitCommandManager {
             yield this.execGit(args);
         });
     }
-    addRemote(remoteRepository) {
+    addRemote(remoteName, remoteRepository) {
         return __awaiter(this, void 0, void 0, function* () {
-            const args = ['remote', 'add', remoteRepository];
+            const args = ['remote', 'add', "remote", remoteRepository];
             yield this.execGit(args);
         });
     }
-    push(remoteRepository, force, branches = []) {
+    push(remoteName, force, branches = []) {
         return __awaiter(this, void 0, void 0, function* () {
             if (branches.length == 0) {
-                const args = ['push', "--all", "-u", remoteRepository];
+                const args = ['push', "--all", "-u", remoteName];
                 if (force) {
                     args.push("-f");
                 }
                 yield this.execGit(args);
             }
             else {
-                const args = ['push', remoteRepository];
+                const args = ['push', remoteName];
                 for (let branch of branches) {
                     args.push(`${branch}:${branch}`);
                 }

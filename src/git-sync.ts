@@ -38,8 +38,8 @@ const remote = uuid();
         }
         branches = await git.branchList(false);
         core.info(branches.join(","));
-        await git.addRemote(repoUrl);
-        await git.push(repoUrl, true);
+        await git.addRemote(remote, repoUrl);
+        await git.push(remote, true);
 
 
 

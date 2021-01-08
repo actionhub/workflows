@@ -90,19 +90,19 @@ class GitCommandManager implements IGitCommandManager{
     const args = ['branch', name, (remote ? 'origin/': '') + branch]
     await this.execGit(args)
   }
-  async addRemote(remoteRepository: string): Promise<void> {
-    const args = ['remote', 'add', remoteRepository]
+  async addRemote(remoteName: string, remoteRepository: string): Promise<void> {
+    const args = ['remote', 'add', "remote", remoteRepository]
     await this.execGit(args)
   }
-  async push(remoteRepository: string, force: boolean, branches: string[] = []): Promise<void> {
+  async push(remoteName: string, force: boolean, branches: string[] = []): Promise<void> {
     if (branches.length == 0) {
-      const args = ['push', "--all", "-u", remoteRepository]
+      const args = ['push', "--all", "-u", remoteName]
       if (force) {
         args.push("-f")
       }
       await this.execGit(args)
     } else {
-      const args = ['push', remoteRepository]
+      const args = ['push', remoteName]
       for (let branch of branches) {
         args.push(`${branch}:${branch}`);
       }
