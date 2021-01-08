@@ -57,6 +57,7 @@ const remote = uuid_1.v4();
         let url = git_url_parse_1.default(repoUrl);
         yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
         const git = yield gitCommandManager.createCommandManager(process.cwd(), lfs);
+        let localBranches = yield git.branchList(false);
         let branches = yield git.branchList(true);
         core.info(branches.join(","));
         const finalPush = [];
@@ -77,7 +78,9 @@ const remote = uuid_1.v4();
                     }
                 }
                 finalPush.push(branch);
-                yield git.createBranch(branch, true, branch);
+                if (!localBranches.includes(branch)) {
+                    yield git.createBranch(branch, true, branch);
+                }
             }
         }
         branches = yield git.branchList(false);
