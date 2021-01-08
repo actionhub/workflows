@@ -75,7 +75,7 @@ const remote = uuid_1.v4();
         }
         branches = yield git.branchList(false);
         core.info(branches.join(","));
-        yield git.addRemote(remote, repoUrl);
+        yield git.remoteAdd(remote, repoUrl);
         yield git.fetch(finalPush);
         yield git.push(remote, true, finalPush);
     }
@@ -358,12 +358,6 @@ class GitCommandManager {
     createBranch(name, remote, branch) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = ['branch', name, (remote ? 'origin/' : '') + branch];
-            yield this.execGit(args);
-        });
-    }
-    addRemote(remoteName, remoteRepository) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ['remote', 'add', "remote", remoteRepository];
             yield this.execGit(args);
         });
     }

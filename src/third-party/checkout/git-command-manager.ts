@@ -90,10 +90,6 @@ class GitCommandManager implements IGitCommandManager{
     const args = ['branch', name, (remote ? 'origin/': '') + branch]
     await this.execGit(args)
   }
-  async addRemote(remoteName: string, remoteRepository: string): Promise<void> {
-    const args = ['remote', 'add', "remote", remoteRepository]
-    await this.execGit(args)
-  }
   async push(remoteName: string, force: boolean, branches: string[] = []): Promise<void> {
     if (branches.length == 0) {
       const args = ['push', "--all", "-u", remoteName]

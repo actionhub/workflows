@@ -18,7 +18,7 @@ jobs:
       - uses: ./git-sync
         name: Test 1
         with:
-          ssh-key: ${{ secrets.TEST }}
+          ssh-key: ${{ secrets.CODING_DEPLOY }}
           repo-url: git@e.coding.net:lippen/vertx-web-site/vertx-web-site.git
           include-branches: master;main;test
 #      - uses: ./git-sync
