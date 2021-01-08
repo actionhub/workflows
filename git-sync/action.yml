@@ -4,6 +4,10 @@ runs:
   using: 'node12'
   main: 'index.js'
 inputs:
+  lfs:
+    description: 'Whether to download Git-LFS files'
+    required: false
+    default: 'false'
   ssh-key:
     description: 'Deploy key'
     required: true

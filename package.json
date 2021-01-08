@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build:git-deploy": "ncc build lib/git-deploy.js -o git-deploy",
-    "build:git-sync": "ncc build lib/git-sync.js -o git-sync"
+    "build:git-sync": "ncc build lib/git-sync.js -o git-sync",
+    "run:git-sync": "npm run build && npm run build:git-sync && node ./git-sync/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "license": "Apache2",
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
     "simple-git": "^2.31.0",
     "uuid": "^8.3.2"
   },
