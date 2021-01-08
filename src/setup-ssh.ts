@@ -30,7 +30,6 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         // Start the ssh agent
         const authSock = path.join(tmpDir, uuid() + ".sock");
 
-        fs.writeFileSync(authSock, '', {flag: 'a+'});
         await exec.exec(sshAgentPath, ['-a', authSock]);
         core.exportVariable('SSH_AUTH_SOCK', authSock);
         core.info('add ssh private key');
