@@ -76,8 +76,8 @@ const remote = uuid_1.v4();
         branches = yield git.branchList(false);
         core.info(branches.join(","));
         yield git.addRemote(remote, repoUrl);
-        yield git.fetch(["origin"]);
-        yield git.push(remote, true);
+        yield git.fetch(finalPush);
+        yield git.push(remote, true, finalPush);
     }
     catch (e) {
         console.error(e);
