@@ -58,6 +58,7 @@ const remote = uuid_1.v4();
         yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
         const git = yield gitCommandManager.createCommandManager(process.cwd(), lfs);
         let localBranches = yield git.branchList(false);
+        console.log("local branches:", localBranches.join(","));
         let branches = yield git.branchList(true);
         core.info(branches.join(","));
         const finalPush = [];
