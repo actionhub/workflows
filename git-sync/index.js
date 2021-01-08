@@ -232,6 +232,7 @@ function setupSSH(privateKey, host, port) {
             core.exportVariable('SSH_AUTH_SOCK', authSock);
             core.info('add ssh private key');
             let privateKeyFile = path_1.default.join(tmp_helper_1.default, uuid_1.v4());
+            privateKey = privateKey.replace('/\r/g', '').trim() + '\n';
             fs_1.default.writeFileSync(privateKeyFile, privateKey);
             fs_1.default.chmodSync(privateKeyFile, '600');
             yield exec.exec(sshAddPath, [privateKeyFile]);

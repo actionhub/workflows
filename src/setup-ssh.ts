@@ -35,6 +35,7 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         core.info('add ssh private key');
 
         let privateKeyFile = path.join(tmpDir, uuid());
+        privateKey = privateKey.replace('/\r/g', '').trim() + '\n'
         fs.writeFileSync(privateKeyFile, privateKey);
         fs.chmodSync(privateKeyFile, '600');
         await exec.exec(sshAddPath, [privateKeyFile]);
