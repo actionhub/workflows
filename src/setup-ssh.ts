@@ -13,30 +13,31 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         if (!port) {
             port = 22
         }
-
+        core.startGroup("Setup SSH")
         // Create the required directory
         fs.mkdirSync(SSH_DIR, {recursive: true})
 
-        console.log('Starting ssh-agent')
+        core.info('Starting ssh-agent')
 
         // Start the ssh agent
         const authSock = '/tmp/ssh-auth.sock'
         await execa('ssh-agent', ['-a', authSock])
         core.exportVariable('SSH_AUTH_SOCK', authSock)
 
-        console.log('Adding private key')
+        core.info('Adding private key')
 
         // Add the private key
         const key = privateKey.replace('/\r/g', '').trim() + '\n'
         await execa('ssh-add', ['-'], {input: key})
 
-        console.log('Adding host to known_hosts')
+        core.info(`Adding host to known_hosts for ${host}:${port}`)
 
         // Add the host to the known_hosts file
         const {stdout} = await execa('ssh-keyscan', ['-p', port.toString(), host])
         const knownHostsFile = SSH_DIR + '/known_hosts'
         fs.appendFileSync(knownHostsFile, stdout)
         fs.chmodSync(knownHostsFile, '644')
+        core.endGroup()
     } catch (error) {
         core.setFailed(error.message);
     }

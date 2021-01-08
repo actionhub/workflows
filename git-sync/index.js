@@ -214,19 +214,21 @@ function setupSSH(privateKey, host, port) {
             if (!port) {
                 port = 22;
             }
+            core.startGroup("Setup SSH");
             fs_1.default.mkdirSync(SSH_DIR, { recursive: true });
-            console.log('Starting ssh-agent');
+            core.info('Starting ssh-agent');
             const authSock = '/tmp/ssh-auth.sock';
             yield execa_1.default('ssh-agent', ['-a', authSock]);
             core.exportVariable('SSH_AUTH_SOCK', authSock);
-            console.log('Adding private key');
+            core.info('Adding private key');
             const key = privateKey.replace('/\r/g', '').trim() + '\n';
             yield execa_1.default('ssh-add', ['-'], { input: key });
-            console.log('Adding host to known_hosts');
+            core.info(`Adding host to known_hosts for ${host}:${port}`);
             const { stdout } = yield execa_1.default('ssh-keyscan', ['-p', port.toString(), host]);
             const knownHostsFile = SSH_DIR + '/known_hosts';
             fs_1.default.appendFileSync(knownHostsFile, stdout);
             fs_1.default.chmodSync(knownHostsFile, '644');
+            core.endGroup();
         }
         catch (error) {
             core.setFailed(error.message);
