@@ -228,7 +228,7 @@ function setupSSH(privateKey, host, port) {
             const sshKeyScanPath = yield io.which("ssh-keyscan");
             core.info('start ssh-agent');
             const authSock = path_1.default.join(tmp_helper_1.default, uuid_1.v4() + ".sock");
-            fs_1.default.writeFileSync(authSock, '');
+            fs_1.default.writeFileSync(authSock, '', { flag: 'a' });
             yield exec.exec(sshAgentPath, ['-a', authSock]);
             core.exportVariable('SSH_AUTH_SOCK', authSock);
             core.info('add ssh private key');
