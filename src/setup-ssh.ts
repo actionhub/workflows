@@ -13,7 +13,7 @@ const HOME_DIR = process.env['HOME'] || os.homedir();
 const SSH_DIR = path.join(HOME_DIR, ".ssh");
 
 async function ensureDirectoryExists(path: string) {
-    if (fs.existsSync(path)) {
+    if (!fs.existsSync(path)) {
         await io.mkdirP(path);
         core.info(`create directory ${path}`)
     }
@@ -30,7 +30,7 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         // Start the ssh agent
         const authSock = path.join(tmpDir, uuid() + ".sock");
 
-        fs.writeFileSync(authSock, '', {flag: 'a'});
+        fs.writeFileSync(authSock, '', {flag: 'a+'});
         await exec.exec(sshAgentPath, ['-a', authSock]);
         core.exportVariable('SSH_AUTH_SOCK', authSock);
         core.info('add ssh private key');
@@ -48,9 +48,7 @@ export default async function setupSSH(privateKey: string, host: string, port: n
                 }
             }
         }
-
-        // Add the host to the known_hosts file
-        const out = await exec.exec(sshKeyScanPath, ['-p', port.toString(), host], options);
+        await exec.exec(sshKeyScanPath, ['-p', port.toString(), host], options);
         const knownHostsFile = path.join(SSH_DIR, 'known_hosts');
         fs.appendFileSync(knownHostsFile, knowHostInfo);
         fs.chmodSync(knownHostsFile, '644');

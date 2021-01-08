@@ -211,7 +211,7 @@ const HOME_DIR = process.env['HOME'] || os_1.default.homedir();
 const SSH_DIR = path_1.default.join(HOME_DIR, ".ssh");
 function ensureDirectoryExists(path) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (fs_1.default.existsSync(path)) {
+        if (!fs_1.default.existsSync(path)) {
             yield io.mkdirP(path);
             core.info(`create directory ${path}`);
         }
@@ -228,7 +228,7 @@ function setupSSH(privateKey, host, port) {
             const sshKeyScanPath = yield io.which("ssh-keyscan");
             core.info('start ssh-agent');
             const authSock = path_1.default.join(tmp_helper_1.default, uuid_1.v4() + ".sock");
-            fs_1.default.writeFileSync(authSock, '', { flag: 'a' });
+            fs_1.default.writeFileSync(authSock, '', { flag: 'a+' });
             yield exec.exec(sshAgentPath, ['-a', authSock]);
             core.exportVariable('SSH_AUTH_SOCK', authSock);
             core.info('add ssh private key');
@@ -244,7 +244,7 @@ function setupSSH(privateKey, host, port) {
                     }
                 }
             };
-            const out = yield exec.exec(sshKeyScanPath, ['-p', port.toString(), host], options);
+            yield exec.exec(sshKeyScanPath, ['-p', port.toString(), host], options);
             const knownHostsFile = path_1.default.join(SSH_DIR, 'known_hosts');
             fs_1.default.appendFileSync(knownHostsFile, knowHostInfo);
             fs_1.default.chmodSync(knownHostsFile, '644');
