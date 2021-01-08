@@ -26,9 +26,10 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         const sshAgentPath = await io.which("ssh-agent");
         const sshAddPath = await io.which("ssh-add");
         const sshKeyScanPath = await io.which("ssh-keyscan");
-        core.info('start ssh-agent')
+        core.info('start ssh-agent');
         // Start the ssh agent
         const authSock = path.join(tmpDir, uuid() + ".sock");
+        fs.writeFileSync(authSock, '');
         await exec.exec(sshAgentPath, ['-a', authSock]);
         core.exportVariable('SSH_AUTH_SOCK', authSock);
         core.info('add ssh private key');
@@ -36,7 +37,7 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         let privateKeyFile = path.join(tmpDir, uuid());
         fs.writeFileSync(privateKeyFile, privateKey);
         await exec.exec(sshAddPath, ['-', privateKeyFile]);
-        core.info(`add host key of ${host}:${port} to known_hosts`)
+        core.info(`add host key of ${host}:${port} to known_hosts`);
 
         let knowHostInfo: string = ""
         const options = {
@@ -51,8 +52,8 @@ export default async function setupSSH(privateKey: string, host: string, port: n
         const out = await exec.exec(sshKeyScanPath, ['-p', port.toString(), host], options);
         const knownHostsFile = path.join(SSH_DIR, 'known_hosts');
         fs.appendFileSync(knownHostsFile, knowHostInfo);
-        fs.chmodSync(knownHostsFile, '644')
-        core.endGroup()
+        fs.chmodSync(knownHostsFile, '644');
+        core.endGroup();
     } catch (error) {
         core.setFailed(error.message);
     }
