@@ -45,7 +45,7 @@ const publishDir = path.isAbsolute(src)
         await git.remoteAdd("origin", repoUrl);
 
         const exists = await gitHelper.remoteBranchExists(git, branch);
-        // core.info("[" + exists + "]")
+        core.info("[" + exists + "]")
         if (exists) {
             await git.fetch([]);
             await git.checkout(branch, "");

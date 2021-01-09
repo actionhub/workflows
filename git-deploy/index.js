@@ -79,6 +79,7 @@ const publishDir = path_1.default.isAbsolute(src)
         yield git.init();
         yield git.remoteAdd("origin", repoUrl);
         const exists = yield gitHelper.remoteBranchExists(git, branch);
+        core.info("[" + exists + "]");
         if (exists) {
             yield git.fetch([]);
             yield git.checkout(branch, "");
