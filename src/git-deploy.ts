@@ -44,7 +44,7 @@ const publishDir = path.isAbsolute(src)
         await git.remoteAdd("origin", repoUrl);
 
         const exists = await gitHelper.remoteBranchExists(git, branch);
-        core.info("[" + exists + "]")
+        // core.info("[" + exists + "]")
         if (exists) {
             await git.fetch([]);
             await git.checkout(branch, "");
@@ -56,7 +56,7 @@ const publishDir = path.isAbsolute(src)
             process.chdir(publishDir);
             await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
-
+        await exec.exec("ls")
         await exec.exec("cp", [path.join(publishDir, "*"), gitTmp]);
 
         await git.execGit(["add", "--all"])
