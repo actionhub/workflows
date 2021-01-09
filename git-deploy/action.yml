@@ -4,28 +4,36 @@ runs:
   using: 'node12'
   main: 'index.js'
 inputs:
-  deploy_key:
+  lfs:
+    description: 'Whether to download Git-LFS files'
+    required: false
+    default: 'false'
+  ssh-key:
     description: 'Deploy key'
     required: false
-  src_dir:
+  src-dir:
     description: 'The src dir for sync.'
     required: false
   branch:
     description: 'The des branch for sync.'
     required: false
     default: 'master'
-  des_dir:
+  des-dir:
     description: 'The des dir for sync.'
     required: false
-  repo_url:
+  repo-url:
     description: 'The url for des repo.'
     required: false
-  user_name:
+  user-name:
     description: 'Set Git user.name'
     required: false
-  user_email:
+  user-email:
     description: 'Set Git user.email'
     required: false
-  commit_message:
+  commit-message:
     description: 'Set a custom commit message with a triggered commit hash'
     required: false
+  keep-files:
+    description: 'If existing files in the publish branch should be not removed before deploying'
+    required: false
+    default: 'false'

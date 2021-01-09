@@ -7,7 +7,7 @@ import gitUrlParse from "git-url-parse";
 
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
-const lfs = params.getBoolean("lfs");
+const lfs = params.getBoolean("lfs", false);
 const force = params.getBoolean("force", false);
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);

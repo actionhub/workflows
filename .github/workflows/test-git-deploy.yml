@@ -9,6 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./git-deploy
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          ssh-host: github.com
+        with:
+          ssh-key: ${{ secrets.GITEE_DEPLOY }}
+          src-dir: src
+          branch: master
+          des-dir: ./
+          repo-url: git@gitee.com:okou19900722/test.git
+          user-name: okou19900722
+          user-email: 512058895@qq.com
+          commit-message: publish

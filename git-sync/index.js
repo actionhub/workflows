@@ -47,7 +47,8 @@ const setup_ssh_1 = __importDefault(__webpack_require__(850));
 const git_url_parse_1 = __importDefault(__webpack_require__(244));
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
-const lfs = params.getBoolean("lfs");
+const lfs = params.getBoolean("lfs", false);
+const force = params.getBoolean("force", false);
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 const REMOTE_BRANCH_PREFIX = "origin/";
@@ -58,7 +59,7 @@ const remote = uuid_1.v4();
         yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
         const git = yield gitCommandManager.createCommandManager(process.cwd(), lfs);
         let localBranches = yield git.branchList(false);
-        console.log("local branches:", localBranches.join(","));
+        core.info("local branches:" + localBranches.join(","));
         let branches = yield git.branchList(true);
         core.info(branches.join(","));
         const finalPush = [];
@@ -84,11 +85,13 @@ const remote = uuid_1.v4();
                 }
             }
         }
-        branches = yield git.branchList(false);
-        core.info(branches.join(","));
+        if (core.isDebug()) {
+            branches = yield git.branchList(false);
+            core.debug(branches.join(","));
+        }
         yield git.remoteAdd(remote, repoUrl);
         yield git.fetch(finalPush);
-        yield git.push(remote, true, finalPush);
+        yield git.push(remote, force, finalPush);
     }
     catch (e) {
         core.setFailed(e);
@@ -209,24 +212,16 @@ const fs_1 = __importDefault(__webpack_require__(747));
 const exec = __importStar(__webpack_require__(514));
 const core = __importStar(__webpack_require__(186));
 const io = __importStar(__webpack_require__(436));
-const tmp_helper_1 = __importDefault(__webpack_require__(493));
+const tmp_helper_1 = __importStar(__webpack_require__(493));
 const uuid_1 = __webpack_require__(521);
 const HOME_DIR = process.env['HOME'] || os_1.default.homedir();
 const SSH_DIR = path_1.default.join(HOME_DIR, ".ssh");
-function ensureDirectoryExists(path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!fs_1.default.existsSync(path)) {
-            yield io.mkdirP(path);
-            core.info(`create directory ${path}`);
-        }
-    });
-}
 function setupSSH(privateKey, host, port) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.startGroup("Setup SSH");
-            yield ensureDirectoryExists(SSH_DIR);
-            yield ensureDirectoryExists(tmp_helper_1.default);
+            yield tmp_helper_1.ensureDirectoryExists(SSH_DIR);
+            yield tmp_helper_1.ensureDirectoryExists(tmp_helper_1.default);
             const sshAgentPath = yield io.which("ssh-agent");
             const sshAddPath = yield io.which("ssh-add");
             const sshKeyScanPath = yield io.which("ssh-keyscan");
@@ -1164,16 +1159,57 @@ exports.execute = execute;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ensureDirectoryExists = void 0;
 const uuid_1 = __webpack_require__(521);
 const os_1 = __importDefault(__webpack_require__(87));
 const path_1 = __importDefault(__webpack_require__(622));
+const fs_1 = __importDefault(__webpack_require__(747));
+const io = __importStar(__webpack_require__(436));
+const core = __importStar(__webpack_require__(186));
 const TMP_DIR = os_1.default.tmpdir();
 const tmpDir = path_1.default.join(TMP_DIR, uuid_1.v4());
 exports.default = tmpDir;
+function ensureDirectoryExists(path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!fs_1.default.existsSync(path)) {
+            yield io.mkdirP(path);
+            core.info(`create directory ${path}`);
+        }
+    });
+}
+exports.ensureDirectoryExists = ensureDirectoryExists;
 
 
 /***/ }),
