@@ -5,19 +5,13 @@ import fs from "fs";
 import * as exec from "@actions/exec"
 import * as core from "@actions/core";
 import * as io from "@actions/io";
-import tmpDir from "./tmp-helper";
+import tmpDir, {ensureDirectoryExists} from "./tmp-helper";
 import {v4 as uuid} from 'uuid';
 import execa from "execa";
 
 const HOME_DIR = process.env['HOME'] || os.homedir();
 const SSH_DIR = path.join(HOME_DIR, ".ssh");
 
-async function ensureDirectoryExists(path: string) {
-    if (!fs.existsSync(path)) {
-        await io.mkdirP(path);
-        core.info(`create directory ${path}`)
-    }
-}
 export default async function setupSSH(privateKey: string, host: string, port: number) {
     try {
         core.startGroup("Setup SSH");
