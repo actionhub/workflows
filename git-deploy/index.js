@@ -78,7 +78,7 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
         const exists = yield gitHelper.remoteBranchExists(git, branch);
         core.info("[" + exists + "]");
         if (exists) {
-            yield git.fetch([branch]);
+            yield git.fetch([]);
             yield git.checkout(branch, branch);
         }
         if (keepFiles) {
