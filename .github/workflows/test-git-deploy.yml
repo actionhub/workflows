@@ -18,3 +18,13 @@ jobs:
           user-name: okou19900722
           user-email: 512058895@qq.com
           commit-message: publish
+      - uses: ./git-deploy
+        with:
+          ssh-key: ${{ secrets.CODING_DEPLOY }}
+          src-dir: src
+          branch: master
+          des-dir: ./
+          repo-url: git@e.coding.net:lippen/test/test.git
+          user-name: okou19900722
+          user-email: 512058895@qq.com
+          commit-message: publish
