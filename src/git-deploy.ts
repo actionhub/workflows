@@ -43,7 +43,7 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
         const exists = await gitHelper.remoteBranchExists(git, branch);
         core.info("[" + exists + "]")
         if (exists) {
-            await git.fetch([branch]);
+            await git.fetch([]);
             await git.checkout(branch, branch);
         }
 
