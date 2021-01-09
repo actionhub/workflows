@@ -49,7 +49,7 @@ const git_url_parse_1 = __importDefault(__webpack_require__(8244));
 const tmp_helper_1 = __importStar(__webpack_require__(3493));
 const gitHelper = __importStar(__webpack_require__(9621));
 const path_1 = __importDefault(__webpack_require__(5622));
-const io = __importStar(__webpack_require__(7436));
+const exec = __importStar(__webpack_require__(1514));
 const sshKey = params.get("ssh-key");
 const src = params.get("src-dir", "");
 const branch = params.get("branch", "master");
@@ -93,7 +93,7 @@ const publishDir = path_1.default.isAbsolute(src)
         }
         const targetDir = path_1.default.join(gitTmp, des);
         yield tmp_helper_1.ensureDirectoryExists(targetDir);
-        yield io.cp(publishDir, targetDir, { recursive: true });
+        yield exec.exec("cp", ["-r", path_1.default.join(publishDir, "*"), targetDir]);
         yield git.execGit(["add", "--all"]);
         yield git.config("user.name", userName);
         yield git.config("user.email", userEmail);
