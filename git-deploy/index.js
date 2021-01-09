@@ -67,6 +67,9 @@ if ((!userName ? 1 : 0) ^ (!userEmail ? 1 : 0)) {
 }
 userName = userName || `${process.env.GITHUB_ACTOR}`;
 userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
+const publishDir = path_1.default.isAbsolute(src)
+    ? src
+    : path_1.default.join(`${process.env.GITHUB_WORKSPACE}`, src);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let url = git_url_parse_1.default(repoUrl);
@@ -85,10 +88,10 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
             core.info('Keep existing files');
         }
         else {
-            process.chdir(src);
+            process.chdir(publishDir);
             yield git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
-        yield exec.exec("cp", [path_1.default.join(src, "*"), gitTmp]);
+        yield exec.exec("cp", [path_1.default.join(publishDir, "*"), gitTmp]);
         yield git.execGit(["add", "--all"]);
         yield git.config("user.name", userName);
         yield git.config("user.email", userEmail);

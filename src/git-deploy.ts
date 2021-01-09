@@ -30,6 +30,9 @@ if((!userName?1:0) ^ (!userEmail?1:0)) {
 userName = userName || `${process.env.GITHUB_ACTOR}`;
 userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
 
+const publishDir = path.isAbsolute(src)
+    ? src
+    : path.join(`${process.env.GITHUB_WORKSPACE}`, src);
 
 (async () => {
     try {
@@ -50,11 +53,11 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
         if (keepFiles) {
             core.info('Keep existing files');
         } else {
-            process.chdir(src);
+            process.chdir(publishDir);
             await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
 
-        await exec.exec("cp", [path.join(src, "*"), gitTmp]);
+        await exec.exec("cp", [path.join(publishDir, "*"), gitTmp]);
 
         await git.execGit(["add", "--all"])
 
