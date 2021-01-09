@@ -12,7 +12,7 @@ import * as exec from "@actions/exec";
 
 const sshKey = params.get("ssh-key");
 const src = params.get("src-dir", "");
-const branch = params.get("master", "master");
+const branch = params.get("branch", "master");
 const des = params.get("des-dir", "");
 const repoUrl = params.get("repo-url");
 const keepFiles = params.getBoolean("keep-files", false);
@@ -22,8 +22,6 @@ let userName = params.get("user-name");
 let userEmail = params.get("user-email");
 const commitMessage = params.get("commit-message");
 
-const REMOTE_BRANCH_PREFIX = "origin/";
-const remote = uuid();
 const gitTmp = path.join(tmpDir, uuid());
 
 if((!userName?1:0) ^ (!userEmail?1:0)) {
