@@ -8,7 +8,6 @@ import gitUrlParse from "git-url-parse";
 import tmpDir, {ensureDirectoryExists} from "./tmp-helper";
 import * as gitHelper from "./git-helper";
 import path from "path";
-import * as exec from "@actions/exec";
 import * as io from "@actions/io";
 
 const sshKey = params.get("ssh-key");
@@ -57,8 +56,10 @@ const publishDir = path.isAbsolute(src)
             process.chdir(publishDir);
             await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
+        const targetDir = path.join(gitTmp, des);
+        await ensureDirectoryExists(targetDir);
         // await exec.exec("ls", [publishDir])
-        await io.cp(publishDir, gitTmp, {recursive: true});
+        await io.cp(publishDir, targetDir, {recursive: true});
 
         await git.execGit(["add", "--all"])
 
