@@ -61,7 +61,7 @@ const publishDir = path.isAbsolute(src)
         await ensureDirectoryExists(targetDir);
         // await exec.exec("ls", [publishDir])
         // await io.cp(publishDir, targetDir, {recursive: true});
-        await exec.exec("cp", ["-r", path.join(publishDir, "*"), targetDir]);
+        await exec.exec("cp", ["-ar", path.join(publishDir, "*"), targetDir]);
 
         await git.execGit(["add", "--all"])
 

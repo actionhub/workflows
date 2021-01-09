@@ -93,7 +93,7 @@ const publishDir = path_1.default.isAbsolute(src)
         }
         const targetDir = path_1.default.join(gitTmp, des);
         yield tmp_helper_1.ensureDirectoryExists(targetDir);
-        yield exec.exec("cp", ["-r", path_1.default.join(publishDir, "*"), targetDir]);
+        yield exec.exec("cp", ["-ar", path_1.default.join(publishDir, "*"), targetDir]);
         yield git.execGit(["add", "--all"]);
         yield git.config("user.name", userName);
         yield git.config("user.email", userEmail);
