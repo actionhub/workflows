@@ -52,7 +52,7 @@ const path_1 = __importDefault(__webpack_require__(5622));
 const exec = __importStar(__webpack_require__(1514));
 const sshKey = params.get("ssh-key");
 const src = params.get("src-dir", "");
-const branch = params.get("master", "master");
+const branch = params.get("branch", "master");
 const des = params.get("des-dir", "");
 const repoUrl = params.get("repo-url");
 const keepFiles = params.getBoolean("keep-files", false);
@@ -61,8 +61,6 @@ const force = params.getBoolean("force", false);
 let userName = params.get("user-name");
 let userEmail = params.get("user-email");
 const commitMessage = params.get("commit-message");
-const REMOTE_BRANCH_PREFIX = "origin/";
-const remote = uuid_1.v4();
 const gitTmp = path_1.default.join(tmp_helper_1.default, uuid_1.v4());
 if ((!userName ? 1 : 0) ^ (!userEmail ? 1 : 0)) {
     throw new Error("please configure user-name and user-email at the same time");

@@ -7,7 +7,6 @@ import * as core from "@actions/core";
 import * as io from "@actions/io";
 import tmpDir, {ensureDirectoryExists} from "./tmp-helper";
 import {v4 as uuid} from 'uuid';
-import execa from "execa";
 
 const HOME_DIR = process.env['HOME'] || os.homedir();
 const SSH_DIR = path.join(HOME_DIR, ".ssh");
