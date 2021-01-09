@@ -10,13 +10,13 @@ jobs:
       - uses: actions/checkout@v1
 
       - uses: ./git-sync
-        name: Sync to Coding.net
+        name: Sync to coding.net
         with:
           ssh-key: ${{ secrets.CODING_DEPLOY }}
           repo-url: git@e.coding.net:lippen/workflows/workflows.git
           include-branches: master;main;test
       - uses: ./git-sync
-        name: Sync to Gitee.com
+        name: Sync to gitee.com
         with:
           ssh-key: ${{ secrets.GITEE_DEPLOY }}
           repo-url: git@gitee.com:okou19900722/workflows.git
@@ -27,9 +27,23 @@ jobs:
           repo-url: git@codechina.csdn.net:okou19900722/workflows.git
           exclude-branches: test
       - uses: ./git-sync
-        name: Sync to Gitlab.com
+        name: Sync to gitlab.com
         with:
           ssh-key: ${{ secrets.GITLAB_DEPLOY }}
           repo-url: git@gitlab.com:okou19900722/workflows.git
+          include-branches: master;main;test
+          exclude-branches: test
+      - uses: ./git-sync
+        name: Sync to bitbucket.org
+        with:
+          ssh-key: ${{ secrets.BITBUCKET_DEPLOY }}
+          repo-url: git@bitbucket.org:okou19900722/workflows.git
+          include-branches: master;main;test
+          exclude-branches: test
+      - uses: ./git-sync
+        name: Sync to code.aliyun.com
+        with:
+          ssh-key: ${{ secrets.ALI_CODE_DEPLOY }}
+          repo-url: git@code.aliyun.com:okou19900722/workflows.git
           include-branches: master;main;test
           exclude-branches: test
