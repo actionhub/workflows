@@ -38,12 +38,8 @@ jobs:
         with:
           ssh-key: ${{ secrets.BITBUCKET_DEPLOY }}
           repo-url: git@bitbucket.org:okou19900722/workflows.git
-          include-branches: master;main;test
-          exclude-branches: test
       - uses: ./git-sync
         name: Sync to code.aliyun.com
         with:
           ssh-key: ${{ secrets.ALI_CODE_DEPLOY }}
           repo-url: git@code.aliyun.com:okou19900722/workflows.git
-          include-branches: master;main;test
-          exclude-branches: test
