@@ -44,7 +44,7 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
         core.info("[" + exists + "]")
         if (exists) {
             await git.fetch([]);
-            await git.checkout(branch, branch);
+            await git.checkout(branch, "");
         }
 
         if (keepFiles) {

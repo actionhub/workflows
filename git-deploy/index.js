@@ -79,7 +79,7 @@ userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
         core.info("[" + exists + "]");
         if (exists) {
             yield git.fetch([]);
-            yield git.checkout(branch, branch);
+            yield git.checkout(branch, "");
         }
         if (keepFiles) {
             core.info('Keep existing files');
