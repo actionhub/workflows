@@ -378,7 +378,7 @@ class GitCommandManager implements IGitCommandManager{
     return result
   }
 
-  private async execGit(
+  async execGit(
     args: string[],
     allowAllExitCodes = false,
     silent = false

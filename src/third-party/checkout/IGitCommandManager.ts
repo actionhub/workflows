@@ -3,6 +3,7 @@ export default interface IGitCommandManager {
     createBranch(name: string, remote: boolean, branch: string): Promise<void>
     push(remoteName: string, force: boolean, branches?: string[]): Promise<void>;
     remoteAdd(remoteName: string, remoteUrl: string): Promise<void>
+    execGit(args: string[]): Promise<any>
 
     branchDelete(remote: boolean, branch: string): Promise<void>
     branchExists(remote: boolean, pattern: string): Promise<boolean>
