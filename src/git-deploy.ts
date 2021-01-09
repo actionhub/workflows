@@ -58,7 +58,7 @@ const publishDir = path.isAbsolute(src)
             await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
         // await exec.exec("ls", [publishDir])
-        await io.cp(path.join(publishDir, "*"), gitTmp, {recursive: true});
+        await io.cp(publishDir, gitTmp, {recursive: true});
 
         await git.execGit(["add", "--all"])
 

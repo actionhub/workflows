@@ -90,7 +90,7 @@ const publishDir = path_1.default.isAbsolute(src)
             process.chdir(publishDir);
             yield git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
         }
-        yield io.cp(path_1.default.join(publishDir, "*"), gitTmp, { recursive: true });
+        yield io.cp(publishDir, gitTmp, { recursive: true });
         yield git.execGit(["add", "--all"]);
         yield git.config("user.name", userName);
         yield git.config("user.email", userEmail);
