@@ -10,6 +10,7 @@ import * as gitHelper from "./git-helper";
 import path from "path";
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
+import * as fs from "fs";
 
 const sshKey = params.get("ssh-key");
 const src = params.get("src-dir", "");
@@ -60,8 +61,11 @@ const publishDir = path.isAbsolute(src)
         const targetDir = path.join(gitTmp, des);
         await ensureDirectoryExists(targetDir);
         // await exec.exec("ls", [publishDir])
-        // await io.cp(publishDir, targetDir, {recursive: true});
-        await exec.exec("cp", ["-ar", path.join(publishDir, "*"), targetDir]);
+        // await exec.exec("cp", ["-arf", path.join(publishDir, "*"), targetDir]);
+        const files = fs.readdirSync(publishDir);
+        for (let file of files) {
+            await io.cp(path.join(publishDir, file), targetDir, {recursive: true});
+        }
 
         await git.execGit(["add", "--all"])
 
