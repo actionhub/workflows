@@ -8,18 +8,19 @@ import gitUrlParse from "git-url-parse";
 const sshKey = params.get("ssh-key");
 const repoUrl = params.get("repo-url");
 const lfs = params.getBoolean("lfs");
+const force = params.getBoolean("force", false);
 const includeBranches = params.getArray("include-branches", ";", []);
 const excludeBranches = params.getArray("exclude-branches", ";", []);
 
 const REMOTE_BRANCH_PREFIX = "origin/";
 const remote = uuid();
-(async() => {
+(async () => {
     try {
         let url = gitUrlParse(repoUrl);
         await setupSSH(sshKey, url.resource, url.port || 22);
         const git = await gitCommandManager.createCommandManager(process.cwd(), lfs);
         let localBranches = await git.branchList(false);
-        console.log("local branches:", localBranches.join(","))
+        core.info("local branches:" + localBranches.join(","))
         let branches = await git.branchList(true);
         core.info(branches.join(","));
         const finalPush = [];
@@ -44,11 +45,13 @@ const remote = uuid();
                 }
             }
         }
-        branches = await git.branchList(false);
-        core.info(branches.join(","));
+        if (core.isDebug()) {
+            branches = await git.branchList(false);
+            core.debug(branches.join(","));
+        }
         await git.remoteAdd(remote, repoUrl);
         await git.fetch(finalPush)
-        await git.push(remote, true, finalPush);
+        await git.push(remote, force, finalPush);
 
     } catch (e) {
         core.setFailed(e);

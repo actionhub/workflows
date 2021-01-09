@@ -22,3 +22,7 @@ inputs:
     description: 'exclude branches, split with `;`.'
     required: false
     default: ''
+  force:
+    description: 'git push -f'
+    required: false
+    default: 'false'
