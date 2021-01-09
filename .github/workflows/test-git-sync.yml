@@ -9,33 +9,27 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-#      - name: Set coding ssh
-#        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-#        with:
-#          ssh-private-key: ${{ secrets.CODING_DEPLOY }}
-#          ssh-host: e.coding.net
-
       - uses: ./git-sync
-        name: Test 1
+        name: Sync to Coding.net
         with:
           ssh-key: ${{ secrets.CODING_DEPLOY }}
-          repo-url: git@e.coding.net:lippen/vertx-web-site/vertx-web-site.git
+          repo-url: git@e.coding.net:lippen/workflows/workflows.git
           include-branches: master;main;test
-#      - uses: ./git-sync
-#        name: Test 2
-#        with:
-#          ssh-key: ${{ secrets.TEST }}
-#          repo-url: github.com
-#      - uses: ./git-sync
-#        name: Test 3
-#        with:
-#          ssh-key: ${{ secrets.TEST }}
-#          repo-url: github.com
-#          exclude-branches: test
-#      - uses: ./git-sync
-#        name: Test 4
-#        with:
-#          ssh-key: ${{ secrets.TEST }}
-#          repo-url: github.com
-#          include-branches: master;main;test
-#          exclude-branches: test
+      - uses: ./git-sync
+        name: Sync to Gitee.com
+        with:
+          ssh-key: ${{ secrets.GITEE_DEPLOY }}
+          repo-url: git@gitee.com:okou19900722/workflows.git
+      - uses: ./git-sync
+        name: Sync to codechina.csdn.net
+        with:
+          ssh-key: ${{ secrets.CSDN_DEPLOY }}
+          repo-url: git@codechina.csdn.net:okou19900722/workflows.git
+          exclude-branches: test
+      - uses: ./git-sync
+        name: Sync to Gitlab.com
+        with:
+          ssh-key: ${{ secrets.GITLAB_DEPLOY }}
+          repo-url: git@gitlab.com:okou19900722/workflows.git
+          include-branches: master;main;test
+          exclude-branches: test
