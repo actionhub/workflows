@@ -129,8 +129,10 @@ function remoteBranchExists(git, branch, remoteName = "origin") {
     return __awaiter(this, void 0, void 0, function* () {
         const { stdout } = yield git.execGit(["ls-remote", "--refs", remoteName, branch]);
         const out = stdout.endsWith("\n") ? stdout.substr(0, stdout.length - 1) : stdout;
+        if (out == "") {
+            return false;
+        }
         const rs = out.split("\n");
-        console.log("==========", rs.length, rs);
         return rs.length > 0;
     });
 }
