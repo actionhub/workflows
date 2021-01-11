@@ -51,7 +51,7 @@ const gitHelper = __importStar(__webpack_require__(9621));
 const path_1 = __importDefault(__webpack_require__(5622));
 const io = __importStar(__webpack_require__(7436));
 const fs = __importStar(__webpack_require__(5747));
-const sshKey = params.get("ssh-key");
+const sshKey = params.get("ssh-key", "");
 const src = params.get("src-dir", "");
 const branch = params.get("branch", "master");
 const des = params.get("des-dir", "");
@@ -59,58 +59,64 @@ const repoUrl = params.get("repo-url");
 const keepFiles = params.getBoolean("keep-files", false);
 const lfs = params.getBoolean("lfs", false);
 const force = params.getBoolean("force", false);
-let userName = params.get("user-name");
-let userEmail = params.get("user-email");
-const commitMessage = params.get("commit-message");
+let userName = params.get("user-name", "");
+let userEmail = params.get("user-email", "");
+const commitMessage = params.get("commit-message", "");
 const gitTmp = path_1.default.join(tmp_helper_1.default, uuid_1.v4());
-if ((!userName ? 1 : 0) ^ (!userEmail ? 1 : 0)) {
-    throw new Error("please configure user-name and user-email at the same time");
-}
-userName = userName || `${process.env.GITHUB_ACTOR}`;
-userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
 const publishDir = path_1.default.isAbsolute(src)
     ? src
     : path_1.default.join(`${process.env.GITHUB_WORKSPACE}`, src);
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        let url = git_url_parse_1.default(repoUrl);
-        yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
-        yield tmp_helper_1.ensureDirectoryExists(gitTmp);
-        const git = yield gitCommandManager.createCommandManager(gitTmp, lfs);
-        yield git.init();
-        yield git.remoteAdd("origin", repoUrl);
-        const exists = yield gitHelper.remoteBranchExists(git, branch);
-        core.info("[" + exists + "]");
-        if (exists) {
-            yield git.fetch([]);
-            yield git.checkout(branch, "");
-        }
-        if (keepFiles) {
-            core.info('Keep existing files');
+    if (sshKey == "") {
+        if (github.context.payload.repository.fork) {
+            core.warning('This action runs on a fork and not found auth token, Skip deployment');
+            return;
         }
         else {
-            process.chdir(publishDir);
-            yield git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
+            throw new Error("ssh-key require!");
         }
-        const targetDir = path_1.default.join(gitTmp, des);
-        yield tmp_helper_1.ensureDirectoryExists(targetDir);
-        const files = fs.readdirSync(publishDir);
-        for (let file of files) {
-            yield io.cp(path_1.default.join(publishDir, file), targetDir, { recursive: true });
-        }
-        yield git.execGit(["add", "--all"]);
-        yield git.config("user.name", userName);
-        yield git.config("user.email", userEmail);
-        const message = commitMessage || `deploy: ${github.context.repo.owner}/${github.context.repo.repo}@${process.env.GITHUB_SHA}`;
-        yield git.execGit(['commit', '--allow-empty', '-m', message]);
-        const { stdout } = yield git.execGit(["name-rev", "--name-only", "HEAD"]);
-        const out = stdout.endsWith("\n") ? stdout.substr(0, stdout.length - 1) : stdout;
-        yield git.push("origin", force, [out]);
     }
-    catch (e) {
-        core.setFailed(e);
+    if ((!userName ? 1 : 0) ^ (!userEmail ? 1 : 0)) {
+        throw new Error("please configure user-name and user-email at the same time");
     }
-}))();
+    userName = userName || `${process.env.GITHUB_ACTOR}`;
+    userEmail = userEmail || `${process.env.GITHUB_ACTOR}@users.noreply.github.com`;
+    let url = git_url_parse_1.default(repoUrl);
+    yield setup_ssh_1.default(sshKey, url.resource, url.port || 22);
+    yield tmp_helper_1.ensureDirectoryExists(gitTmp);
+    const git = yield gitCommandManager.createCommandManager(gitTmp, lfs);
+    yield git.init();
+    yield git.remoteAdd("origin", repoUrl);
+    const exists = yield gitHelper.remoteBranchExists(git, branch);
+    core.info("[" + exists + "]");
+    if (exists) {
+        yield git.fetch([]);
+        yield git.checkout(branch, "");
+    }
+    if (keepFiles) {
+        core.info('Keep existing files');
+    }
+    else {
+        process.chdir(publishDir);
+        yield git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
+    }
+    const targetDir = path_1.default.join(gitTmp, des);
+    yield tmp_helper_1.ensureDirectoryExists(targetDir);
+    const files = fs.readdirSync(publishDir);
+    for (let file of files) {
+        yield io.cp(path_1.default.join(publishDir, file), targetDir, { recursive: true });
+    }
+    yield git.execGit(["add", "--all"]);
+    yield git.config("user.name", userName);
+    yield git.config("user.email", userEmail);
+    const message = commitMessage || `deploy: ${github.context.repo.owner}/${github.context.repo.repo}@${process.env.GITHUB_SHA}`;
+    yield git.execGit(['commit', '--allow-empty', '-m', message]);
+    const { stdout } = yield git.execGit(["name-rev", "--name-only", "HEAD"]);
+    const out = stdout.endsWith("\n") ? stdout.substr(0, stdout.length - 1) : stdout;
+    yield git.push("origin", force, [out]);
+}))().catch(e => {
+    core.setFailed(e);
+});
 
 
 /***/ }),

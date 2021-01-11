@@ -4,8 +4,9 @@ import * as gitCommandManager from "./third-party/checkout/git-command-manager";
 import {v4 as uuid} from 'uuid';
 import setupSSH from "./setup-ssh";
 import gitUrlParse from "git-url-parse";
+import * as github from "@actions/github";
 
-const sshKey = params.get("ssh-key");
+const sshKey = params.get("ssh-key", "");
 const repoUrl = params.get("repo-url");
 const lfs = params.getBoolean("lfs", false);
 const force = params.getBoolean("force", false);
@@ -15,7 +16,15 @@ const excludeBranches = params.getArray("exclude-branches", ";", []);
 const REMOTE_BRANCH_PREFIX = "origin/";
 const remote = uuid();
 (async () => {
-    try {
+        if (sshKey == "") {
+            if ((github.context.payload as any).repository.fork) {
+                core.warning('This action runs on a fork and not found auth token, Skip deployment');
+                return
+            } else {
+                throw new Error("ssh-key require!");
+            }
+        }
+
         let url = gitUrlParse(repoUrl);
         await setupSSH(sshKey, url.resource, url.port || 22);
         const git = await gitCommandManager.createCommandManager(process.cwd(), lfs);
@@ -53,8 +62,7 @@ const remote = uuid();
         await git.fetch(finalPush)
         await git.push(remote, force, finalPush);
 
-    } catch (e) {
-        core.setFailed(e);
-    }
-})();
+})().catch(e => {
+    core.setFailed(e);
+})
 
