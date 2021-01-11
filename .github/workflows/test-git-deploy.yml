@@ -18,6 +18,7 @@ jobs:
           user-name: okou19900722
           user-email: 512058895@qq.com
           commit-message: publish
+          force-orphan: true
       - uses: ./git-deploy
         with:
           ssh-key: ${{ secrets.CODING_DEPLOY }}
