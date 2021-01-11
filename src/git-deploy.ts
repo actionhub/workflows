@@ -18,7 +18,7 @@ const des = params.get("des-dir", "");
 const repoUrl = params.get("repo-url");
 const keepFiles = params.getBoolean("keep-files", false);
 const lfs = params.getBoolean("lfs", false);
-const force = params.getBoolean("force", false);
+const force = params.getBoolean("force-orphan", false);
 let userName = params.get("user-name", "");
 let userEmail = params.get("user-email", "");
 const commitMessage = params.get("commit-message", "");
@@ -49,21 +49,27 @@ const publishDir = path.isAbsolute(src)
     await ensureDirectoryExists(gitTmp);
     const git = await gitCommandManager.createCommandManager(gitTmp, lfs);
     await git.init();
-    await git.remoteAdd("origin", repoUrl);
 
-    const exists = await gitHelper.remoteBranchExists(git, branch);
-    core.info("[" + exists + "]")
-    if (exists) {
-        await git.fetch([]);
-        await git.checkout(branch, "");
-    }
-
-    if (keepFiles) {
-        core.info('Keep existing files');
+    if (force) {
+        await git.execGit(["checkout", "--orphan", branch]);
     } else {
-        process.chdir(publishDir);
-        await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
+        await git.remoteAdd("origin", repoUrl);
+
+        const exists = await gitHelper.remoteBranchExists(git, branch);
+        core.info("[" + exists + "]")
+        if (exists) {
+            await git.fetch([]);
+            await git.checkout(branch, "");
+        }
+
+        if (keepFiles) {
+            core.info('Keep existing files');
+        } else {
+            process.chdir(publishDir);
+            await git.execGit(["rm", "-r", "--ignore-unmatch", "*"]);
+        }
     }
+
     const targetDir = path.join(gitTmp, des);
     await ensureDirectoryExists(targetDir);
     // await exec.exec("ls", [publishDir])
