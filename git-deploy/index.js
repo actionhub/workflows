@@ -86,11 +86,11 @@ const publishDir = path_1.default.isAbsolute(src)
     yield tmp_helper_1.ensureDirectoryExists(gitTmp);
     const git = yield gitCommandManager.createCommandManager(gitTmp, lfs);
     yield git.init();
+    yield git.remoteAdd("origin", repoUrl);
     if (force) {
         yield git.execGit(["checkout", "--orphan", branch]);
     }
     else {
-        yield git.remoteAdd("origin", repoUrl);
         const exists = yield gitHelper.remoteBranchExists(git, branch);
         core.info("[" + exists + "]");
         if (exists) {

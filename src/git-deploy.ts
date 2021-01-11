@@ -50,11 +50,10 @@ const publishDir = path.isAbsolute(src)
     const git = await gitCommandManager.createCommandManager(gitTmp, lfs);
     await git.init();
 
+    await git.remoteAdd("origin", repoUrl);
     if (force) {
         await git.execGit(["checkout", "--orphan", branch]);
     } else {
-        await git.remoteAdd("origin", repoUrl);
-
         const exists = await gitHelper.remoteBranchExists(git, branch);
         core.info("[" + exists + "]")
         if (exists) {
